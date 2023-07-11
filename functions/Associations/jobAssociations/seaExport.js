@@ -83,7 +83,7 @@ Bl.belongsTo(Clients,       {as:'notifyPartyTwo'     });
 SE_Job.belongsTo(Vessel,    {as:'vessel'             });
 SE_Job.belongsTo(Commodity, {as:'commodity'          });
 SE_Job.belongsTo(Employees, {as:'sales_representator'});
-SE_Job.belongsTo(Employees, {as:'created_by'});
+SE_Job.belongsTo(Employees, {as:'created_by'         });
 SE_Job.belongsTo(Vendors,   {as:'forwarder'          });
 SE_Job.belongsTo(Vendors,   {as:'transporter'        });
 SE_Job.belongsTo(Vendors,   {as:'custom_agent'       });
