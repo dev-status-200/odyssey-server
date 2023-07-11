@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         note:{
-            type:DataTypes.TEXT('long'),
+            type:DataTypes.TEXT,
             allowNull: false,
             validate:{
                 notEmpty: true
@@ -35,6 +35,16 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
+        editBy :{
+        type:DataTypes.STRING
+        },
+        opened :{
+            type : DataTypes.STRING,
+            // allowNull: false,
+            // validate:{
+            //     notEmpty: true
+            // }
+        } 
     })
     return Job_notes;
 }

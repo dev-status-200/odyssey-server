@@ -1,9 +1,9 @@
-const { SE_Job, SE_Equipments, Container_Info, Bl, Stamps, Loading_Program } = require("../../functions/Associations/jobAssociations/seaExport");
+const { SE_Job, SE_Equipments, Container_Info, Bl, Stamps, Job_notes, Loading_Program } = require("../../functions/Associations/jobAssociations/seaExport");
 // const {Bl, Stamps} = require("../../functions/Associations/stamps")
 const { Employees } = require("../../functions/Associations/employeeAssociations");
 const { Vendors } = require("../../functions/Associations/vendorAssociations");
 const { Clients }=require("../../functions/Associations/clientAssociation")
-const { Commodity, Job_notes, Vessel, Charges }=require("../../models");
+const { Commodity, Vessel, Charges }=require("../../models");
 const routes = require('express').Router();
 const Sequelize = require('sequelize');
 const moment = require("moment");
@@ -140,6 +140,30 @@ routes.post("/getNotes", async(req, res) => {
     }
 });
 
+routes.get("/getAllNotes", async(req, res) => {
+    try {
+        console.log(req.body)
+        const result = await Job_notes.findAll({
+            // where:{type:"SE", recordId:req.body.id},
+            order:[["createdAt", "DESC"]],
+        });
+        res.json({status:'success', result:result});
+    }
+    catch (error) {
+      res.json({status:'error', result:error});
+    }
+});
+
+routes.post('/updateNotes', async(req, res) => {
+    try {
+     const result =  await Job_notes.update({opened : req.body.data.opened}, {where : {recordId : req.body.data.recordId}})
+     res.json({ status: "success", result:result})
+    }
+    catch (err) {
+     res.json({ status: "error", result:err.message})
+ 
+    }
+ })
 routes.post("/addNote", async(req, res) => {
     try {
         console.log(req.body)
@@ -201,12 +225,13 @@ routes.post("/edit", async(req, res) => {
         await SE_Equipments.destroy({where:{SEJobId:data.id}}).catch((x)=>console.log(2))
         await SE_Equipments.bulkCreate(createEquip(data.equipments, data.id)).catch((x)=>console.log(x))
         res.json({status:'success', result:await getJob(data.id)});
-    }
+    }  
     catch (error) {
-      res.json({status:'error', result:error});
+        console.log(error.message)
+      res.json({status:'error', result:error.message});
     }
 });
-
+  
 routes.get("/get", async(req, res) => {
     try {
         const result = await SE_Job.findAll({
@@ -220,7 +245,7 @@ routes.get("/get", async(req, res) => {
                 }
             ],
             order:[["createdAt", "DESC"]],
-        });
+        }).catch((x)=>console.log(x))
         res.json({status:'success', result:result});
     }
     catch (error) {

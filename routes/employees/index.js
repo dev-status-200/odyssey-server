@@ -148,4 +148,14 @@ routes.get("/createAccess", async(req, res) => {
     }
 });
 
+
+routes.get('/allRiders', async(req, res) => {
+    try {
+      const result =  await Employees.findAll({where : {designation:"rider" }})
+        res.json({status:'success', result:result});
+    }
+    catch (error) {
+      res.json({status:'error', result:error});
+    }
+})
 module.exports = routes;
