@@ -45,12 +45,6 @@ app.use(bodyParser.json({limit: '100mb', extended: true}));
 app.use(express.json());
 db.sequelize.sync();
 
-const PORT = 4000
-
-app.listen(PORT, () => {
-    console.log(`API listening on PORT ${PORT} `)
-  })
-
 app.get("/", (req, res) => { res.json('Welcome to Sea Net System Server') });
 //app.get("/getUser", verify, (req, res) => {res.json({isLoggedIn:true,username:req.body.username})});
 app.use("/home", homeAccountRoutes, homeOperationsRoutes);
@@ -72,6 +66,6 @@ app.use("/misc", miscPartiesRoutes, miscProfitLossRoutes);
 app.use("/tasks", assignedTasks);
 
 // abdullah added a new feature
+const PORT = process.env.PORT || 8081; 
 
-
-module.exports = app
+app.listen(PORT, () => { console.log(`App listenings on port ${PORT}`) })  
