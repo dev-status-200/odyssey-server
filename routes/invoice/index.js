@@ -187,37 +187,38 @@ routes.get("/getFilteredInvoices", async(req, res) => {
 
 routes.get("/getInvoiceByNo", async(req, res) => {
   try {
-    const attr = [
-      'name', 'address1', 'address1', 'person1', 'mobile1',
-      'person2', 'mobile2', 'telephone1', 'telephone2', 'infoMail'
-    ];
-    const resultOne = await Invoice.findOne({
-      where:{invoice_No:req.headers.invoice_no.toUpperCase()},
-      include:[
-        { model:Charge_Head },
-        {
-          model:SE_Job,
-          attributes:[
-            'jobNo', 'jobDate', 'shipDate', 'pol', 'pod', 'fd', 'vol', 'weight', 'pcs'
-          ],
-          //attributes:['id'],
-          include:[
-            { model:Bl , attributes:['mbl', 'hbl'] },
-            { model:Voyage , attributes:['voyage', 'importArrivalDate', 'exportSailDate'] },
-            { model:Clients, attributes:attr },
-            { model:Clients, as:'consignee', attributes:attr },
-            { model:Clients, as:'shipper', attributes:attr },
-            { model:Vendors, as:'shipping_line', attributes:attr },
-            { model:Employees, as:'sales_representator', attributes:['name'] },
-            { model:Vessel, as:'vessel', attributes:['carrier', 'name'] },
-            //{ model:Voyage },
-          ]
-        },
-      ],
-      order: [
-        [{ model: Charge_Head }, 'id', 'ASC'],
-      ]
-    });
+      console.log("req.headers", req.headers)
+      const attr = [
+        'name', 'address1', 'address1', 'person1', 'mobile1',
+        'person2', 'mobile2', 'telephone1', 'telephone2', 'infoMail'
+      ];
+      const resultOne = await Invoice.findOne({
+        where:{invoice_No:req.headers.invoiceno.toUpperCase()},
+        include:[
+          { model:Charge_Head },
+          {
+            model:SE_Job,
+            attributes:[
+              'jobNo', 'jobDate', 'shipDate', 'pol', 'pod', 'fd', 'vol', 'weight', 'pcs'
+            ],
+            //attributes:['id'],
+            include:[
+              { model:Bl , attributes:['mbl', 'hbl'] },
+              { model:Voyage , attributes:['voyage', 'importArrivalDate', 'exportSailDate'] },
+              { model:Clients, attributes:attr },
+              { model:Clients, as:'consignee', attributes:attr },
+              { model:Clients, as:'shipper', attributes:attr },
+              { model:Vendors, as:'shipping_line', attributes:attr },
+              { model:Employees, as:'sales_representator', attributes:['name'] },
+              { model:Vessel, as:'vessel', attributes:['carrier', 'name'] },
+              //{ model:Voyage },
+            ]
+          },
+        ],
+        order: [
+          [{ model: Charge_Head }, 'id', 'ASC'],
+        ]
+      }).catch((x)=>console.log(x))
       res.json({status:'success', result:{ resultOne }});
     }
     catch (error) {
