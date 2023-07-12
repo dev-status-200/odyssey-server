@@ -1,11 +1,17 @@
 const express = require("express");
 const app = express();
+var http = require('http')
+var path = require('path')
 
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 
 const db = require("./models");
+
+app.set('port', process.env.PORT || 3000)
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'pug')
 
 const employeeRoutes = require('./routes/employees/');
 const companyRoutes = require('./routes/companies/');
@@ -66,6 +72,9 @@ app.use("/misc", miscPartiesRoutes, miscProfitLossRoutes);
 app.use("/tasks", assignedTasks);
 
 // abdullah added a new feature
-const PORT = process.env.PORT || 8081; 
+const PORT = process.env.PORT || 8081;
 
-app.listen(PORT, () => { console.log(`App listenings on port ${PORT}`) })  
+http.createServer(app).listen(app.get('port'), () => {
+    console.log('Express server listening on port ' + app.get('port'))
+})
+//app.listen(PORT, () => { console.log(`App listenings on port ${PORT}`) })

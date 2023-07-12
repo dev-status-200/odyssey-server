@@ -368,6 +368,16 @@ routes.post("/invApproveDisapp", async(req, res) => {
   }
 });
 
+routes.post("/addInvoiceNote", async(req, res) => {
+  try {
+    await Invoice.update({ note:req.body.note}, { where:{id:req.body.id} });
+    await res.json({status: 'success', result: 'result'});
+  }
+  catch (error) {
+    res.json({status: 'error', result: error});
+  }
+});
+
 routes.post("/saveHeadesNew", async(req, res) => {
   try {
     await Charge_Head.destroy({where:{id:req.body.deleteList}})
