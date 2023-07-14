@@ -218,6 +218,17 @@ routes.get("/getVoucherById", async (req, res) => {
   } catch (error) {
     res.json({ status: "error", result: error });
   }
+});  
+
+routes.get("/getVouchersByEmployeeId", async (req, res) => {
+  try {
+    const result = await Office_Vouchers.findAll({
+      where: { EmployeeId: req.headers.id },
+    });
+    await res.json({ status: "success", result: result });
+  } catch (error) {
+    res.json({ status: "error", result: error });
+  }
 });   
 
 module.exports = routes;
