@@ -53,8 +53,10 @@ routes.post("/OfficeVoucherUpsert", async (req, res) => {
 
 routes.get("/OfficeVoucherById", async (req, res) => {
   try {
-    const result = await Office_Vouchers.findOne({where:{id:req.headers.id}})
-    res.json({ status: "success", result:result });
+    const result = await Office_Vouchers.findOne({where:{id:req.headers.id},
+      include:[{model:Employees, attributes:['name']}, 
+      {model:Vouchers, attributes:['voucher_Id']}], })
+      res.json({ status: "success", result:result });
   } catch (error) {
     res.json({ status: "error", result: error });
   }
