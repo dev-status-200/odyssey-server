@@ -238,6 +238,7 @@ routes.get("/get", async(req, res) => {
             where:{companyId:req.headers.companyid},
             include:[
                 {model:Voyage},
+                {model:Employees, as:'created_by', attributes:['name'] },
                 {model:SE_Equipments},
                 {
                     model:Clients,
