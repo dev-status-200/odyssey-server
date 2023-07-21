@@ -17,6 +17,11 @@ const Op = Sequelize.Op;
 // (For Expense)
 // Expenses Payment
 
+// Office_Vouchers
+// 0 Unpaid
+// 1 Fully-paid
+// 2 Half-paid
+
 const setVoucherHeads = (id, heads) => {
   let result = [];
   heads.forEach((x) => {
@@ -42,6 +47,23 @@ routes.post("/ApproveOfficeVoucher", async (req, res) => {
     res.json({ status: "error", result: error });
   }
 });
+
+routes.post("/recordReverse", async (req, res) => {
+  try {
+    const result = await Vouchers.findOne({
+      where:{id:req.body.VoucherId},
+      include:[{model:Voucher_Heads}]
+    })
+    await Office_Vouchers.update(
+      { reverseAmount:req.body.reverseAmount, paid:req.body.paid },
+      { where:{id:req.body.id} }
+    ).catch((x)=>console.log(x))
+    res.json({ status: "success", result:result });
+  } catch (error) {
+    res.json({ status: "error", result: error });
+  }
+});
+
 routes.post("/OfficeVoucherUpsert", async (req, res) => {
   try {
     const result = await Office_Vouchers.upsert(req.body).catch((x)=>console.log(x));
@@ -65,9 +87,12 @@ routes.get("/OfficeVoucherById", async (req, res) => {
 routes.get("/OfficeAllVouchers", async (req, res) => {
   try {
     const result = await Office_Vouchers.findAll({
-      attributes:['id', 'EmployeeId', 'amount', 'requestedBy', 'preparedBy', 'approved'],
+      attributes:['id', 'EmployeeId', 'amount', 'requestedBy', 'preparedBy', 'approved', 'paid'],
       where:{CompanyId:req.headers.companyid},
-      include:[{model:Employees, attributes:['name']}]
+      include:[
+        {model:Employees, attributes:['name']},
+        {model:Vouchers, attributes:['voucher_Id']},
+      ]
     })
     res.json({ status: "success", result:result });
   } catch (error) {
@@ -77,16 +102,19 @@ routes.get("/OfficeAllVouchers", async (req, res) => {
 
 routes.post("/voucherCreation", async (req, res) => {
   try {
-    const check = await Vouchers.findOne({order:[["voucher_No","DESC"]], attributes:["voucher_No"], where:{ vType: req.body.vType}});
+    const check = await Vouchers.findOne({
+      order:[["voucher_No","DESC"]],
+      attributes:["voucher_No"],
+      where:{ vType: req.body.vType}
+    });
     const result = await Vouchers.create({
       ...req.body,
       voucher_No: check == null ? 1 : parseInt(check.voucher_No) + 1,
       voucher_Id: `${
-        req.body.CompanyId == 1
-          ? "SNS"
-          : req.body.CompanyId == 2
-          ? "CLS"
-          : "ACS"
+        req.body.CompanyId == 1 ?
+          "SNS" :
+        req.body.CompanyId == 2?
+          "CLS" : "ACS"
       }-${req.body.vType}-${
         check == null ? 1 : parseInt(check.voucher_No) + 1
       }/${moment().format("YY")}`,
