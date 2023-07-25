@@ -1,15 +1,36 @@
+const { Employees } = require("../../functions/Associations/employeeAssociations");
 const { AssignTask } = require("../../models");
 const routes = require('express').Router();
 const Sequelize = require('sequelize');
 
-routes.post('/allTasks', async (req, res) =>{
+routes.post('/createTask', async (req, res) =>{
 try {
     const result = await AssignTask.create(req.body)
     res.json({result: result})
-} catch (error) {
-    
-}
+} 
+catch (error) {
+    res.json({status:'error', result:error});
+  }
 })
+
+routes.get('/getEmployeeTask', async (req, res) =>{
+    try {
+          const result = await AssignTask.findAll({where : {EmployeeId : req.headers.id}, 
+            include: [{
+              model: Employees,
+              as: 'assignedBy',
+              attributes: ['name']
+            }]
+          })
+          res.json({result: result})
+    } 
+    catch (error) {
+        res.json({status:'error', result:error});
+      }
+    })
+    
+    
+
 
 
 module.exports = routes
