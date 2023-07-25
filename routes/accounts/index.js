@@ -499,17 +499,17 @@ routes.get("/parentAccounts", async(req, res) => {
 });
 
 routes.post("/accountTest", async(req, res) => {
-  let obj = [];
+  let obj = []
   try {
     obj.forEach(async(x)=>{
-      const result = await Parent_Account.create(x).catch((z)=>console.log(z))
-      if(x.childs.length>0){
-        let tempAccounts = [];
-        x.childs.forEach((y)=>{
-          tempAccounts.push({...y, ParentAccountId:result.id})
-        })
-        await Child_Account.bulkCreate(tempAccounts).catch((z)=>console.log(z))
-      }
+        const result = await Parent_Account.create(x).catch((z)=>console.log(z))
+        if(x.childs.length>0){
+          let tempAccounts = [];
+          x.childs.forEach((y)=>{
+            tempAccounts.push({...y, ParentAccountId:result.id})
+          })
+          await Child_Account.bulkCreate(tempAccounts).catch((z)=>console.log(z))
+        }
     });
     res.json({status:'success'});
   }
@@ -518,4 +518,16 @@ routes.post("/accountTest", async(req, res) => {
   }
 });
 
+// routes.post("/accountTest", async(req, res) => {
+//   let obj = [];
+//   try {
+//     await Child_Account.destroy({where:{editable:'1'}})
+//     res.json({status:'success'});
+//   }
+//   catch (error) {
+//     res.json({status:'error', result:error});
+//   }
+// });
+
 module.exports = routes;
+
