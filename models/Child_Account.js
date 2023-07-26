@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         editable:{
             type:DataTypes.STRING,
-        }
+        },
+        subCategory:{
+            type:DataTypes.STRING,
+        },
     })
     return Child_Account;
 }

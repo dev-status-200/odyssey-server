@@ -5,8 +5,9 @@ const Sequelize = require('sequelize');
 
 routes.post('/createTask', async (req, res) =>{
     try {
-        const result = await AssignTask.create(req.body)
-        res.json({result: result})
+        //console.log(req.body)
+        const result = await AssignTask.create(req.body).catch((x)=>console.log(x))
+        res.json({status:"success", result: result})
     } 
     catch (error) {
         res.json({status:'error', result:error});
