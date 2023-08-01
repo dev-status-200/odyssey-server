@@ -266,7 +266,7 @@ routes.get("/getAllInoivcesByPartyId", async(req, res) => {
               include:[
                 {
                   model:Parent_Account,
-                  where:{ title:req.headers.pay=="Recievable"?"Accounts Recievable":"Accounts Payble" }
+                  where:{ title:req.headers.pay=="Recievable"?"ACCOUNT RECEIVABLE":"ACCOUNT PAYABLE" }
                 }
               ]
             }
@@ -285,7 +285,7 @@ routes.get("/getAllInoivcesByPartyId", async(req, res) => {
               include:[
                 {
                   model:Parent_Account,
-                  where:{ title:req.headers.pay=="Recievable"?"Accounts Recievable":"Accounts Payble" }
+                  where:{ title:req.headers.pay=="Recievable"?"ACCOUNT RECEIVABLE":"ACCOUNT PAYABLE" }
                 }
               ]
             }
@@ -301,7 +301,7 @@ routes.get("/getAllInoivcesByPartyId", async(req, res) => {
               include:[
                 {
                   model:Parent_Account,
-                  where:{ title:req.headers.pay=="Recievable"?"Accounts Recievable":"Accounts Payble" }
+                  where:{ title:req.headers.pay=="Recievable"?"ACCOUNT RECEIVABLE":"ACCOUNT PAYABLE" }
                 }
               ]
             }

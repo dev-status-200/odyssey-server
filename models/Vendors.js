@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         ntn: { type:DataTypes.STRING },
         registerDate: { type:DataTypes.STRING },
         operations: { type:DataTypes.STRING },
-        types: { type:DataTypes.STRING },
+        types: { type:DataTypes.TEXT },
         bankAuthorizeDate: { type:DataTypes.STRING },
         bank: { type:DataTypes.STRING },
         branchName: { type:DataTypes.STRING },

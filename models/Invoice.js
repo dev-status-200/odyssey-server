@@ -57,8 +57,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING,
         },
         note:{
-            type:DataTypes.TEXT,
-            defaultValue: '<p></p>',
+            type:DataTypes.TEXT
         },
     })
     return Invoice;
