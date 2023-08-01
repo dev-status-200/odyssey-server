@@ -502,6 +502,8 @@ routes.get("/getInvoices", async(req, res) =>{
   }
 })
 
+
+
 routes.get('/getTaskInvoices', async(req, res) => {
   try {
     const result = await Invoice.findAll({ where: {status: "2" , approved: "1"}})
@@ -511,5 +513,4 @@ routes.get('/getTaskInvoices', async(req, res) => {
     res.json({status: 'error', result: error});
   }
 })
-
 module.exports = routes;        
